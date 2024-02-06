@@ -1,0 +1,25 @@
+from flask import Flask, render_template
+import requests
+
+
+app = Flask("Weather App")
+
+@app.route("/")
+def main():
+    url = "http://api.weatherapi.com/v1/current.json?key=1c08a11398654384bdf164955240502&q=Teni&aqi=no"
+    response = requests.get(url)
+    data = response.json()
+    weatherData = {
+        'location': data.get("location").get('name'),
+        'temp': data.get('current').get('temp_c'),
+        'icon' : data.get('current').get('condition').get('icon'),
+        'condition':data.get('current').get('condition').get('text')
+    }
+    return render_template('index.html', weatherData = weatherData)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+    
